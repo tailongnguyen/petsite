@@ -1,0 +1,183 @@
+{% load staticfiles %}
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+        <script src="{% static 'js/infinite.min.js' %}"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <title>
+            {% block title %}
+                Deep-Pet
+            {% endblock title %}
+        </title>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Playfair+Display+SC" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave+Display" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Gilda+Display" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+        {% block header %}{% endblock header %}
+    </head>
+    <body data-spy="scroll" data-target=".navbar" data-offset="50">
+        <div class="hero-image">
+            <div class="hero-text">
+                <h1 style="font-size:100px">DEEP PET</h1>
+                <h2>Ease the way to cuteness</h2>
+                <button data-toggle="modal" data-target="#myModal" id="findpet">Identify some pets? </button>
+            </div>
+            <div id="myModal" class="modal" role="dialog">
+                <div class="modal-dialog">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title" style="font-family: Freakin">You only need images</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" action="{% url 'pet:find pet' %}" enctype="multipart/form-data" class="">
+                            {% csrf_token %}
+                            <div class="input-group" style="font-family: Freakin">
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary icon-span-filestyle glyphicon glyphicon-folder-open">
+                                            Browse… <input type="file" style="display: none;" class="file" name="image">
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" readonly="" id="image" placeholder="Search by image">
+                            </div>
+                            </br>
+                                        
+                            </br>
+                            <div style="text-align: center;font-family: Freakin; font-size:  25px">
+                                <button class="btn btn-primary"  >Search now</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal" style="font-family: Freakin">Close</button>
+                    </div>
+                    
+                  </div>
+              
+                </div>
+              </div>
+            <nav class="navbar" data-spy="affix" data-offset-top="0">
+                <ul class="nav navbar-nav" style="float:left;">
+                    <li>
+                        <a href="{% url 'pet:index' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'pet:pet list' %}">Pets</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'pet:pet purchases' 'Chó' 'price'%}">Purchases</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'pet:top users' 'followers' %}">Who to follows?</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav" style="float:right;">
+                    
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="{% url 'pet:my purchases' 'Chó' 'timeCreate'%}">My purchases</a>
+                        </li>
+                        <li>
+                        <a href="{% url 'pet:current user profile'%}">My Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'auth_password_change' %}">Change Password</a>
+                        </li>
+                        <li >
+                            <a href="{% url 'auth_logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'registration_register' %}">Register</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'auth_login' %}">Login</a>
+                        </li>
+                    {% endif %}
+            
+                </ul>
+            </nav>
+        </div>
+        <div class="container" id="container">
+            {% block content %}{% endblock content %}
+        </div>
+        
+        <footer>
+            <div class="footer" id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6">
+                            <h3> Contact us </h3>
+                            <ul>
+                                <li> <a href="https://www.facebook.com/tiensinh.vu"> Vu Tien Sinh </a> </li>
+                                <li> <a href="https://www.facebook.com/tafilong"> Nguyen Tai Long </a> </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6">
+                            <h3> Location </h3>
+                            <ul>
+                                <li> <a href="#"> K60-CA </a> </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2  col-md-2 col-sm-4 col-xs-6">
+                            <h3> University </h3>
+                            <ul>
+                                <li> <a href="#">  UET-VNU</a> </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3  col-md-3 col-sm-6 col-xs-12 ">
+                            <h3> More Contact </h3>
+                            <ul class="social">
+                                <li> <a href="http://fb.com" target="_blank"> <i class=" fa fa-facebook">   </i> </a> </li>
+                                <li> <a href="http://twitter.com" target="_blank"> <i class="fa fa-twitter">   </i> </a> </li>
+                                <li> <a href="http://google.com" target="_blank"> <i class="fa fa-google-plus">   </i> </a> </li>
+                                <li> <a href="http://youtube.com" target="_blank"> <i class="fa fa-youtube">   </i> </a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--/.row--> 
+                </div>
+                <!--/.container--> 
+            </div>
+            <!--/.footer-->
+            
+            <div class="footer-bottom">
+                <div class="container">
+                    <p class="pull-left"> Copyright © SILO 2017. All right reserved. </p>
+                </div>
+            </div>
+            <!--/.footer-bottom--> 
+        </footer>
+    </body>
+    <script>
+     $(window).scroll(function () 
+     { 
+        if ($(window).scrollTop() >= 640) 
+            { $('.navbar').css('background','black'); } 
+        else 
+            { $('.navbar').css('background','transparent');} 
+     });
+    $(document).ready(function() {
+        var el = document.getElementById('container');
+        console.log(el);
+        el.scrollIntoView(true);
+    });
+    $(document).on('change', '.file', function(){
+        $("#image").val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+
+    </script>
+</html>

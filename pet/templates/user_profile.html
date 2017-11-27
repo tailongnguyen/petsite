@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}
+    User profile
+{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
+            <div class="well profile">
+                <div class="col-sm-12 content">
+                    <div class="col-xs-12 col-sm-8">
+                         {% if user_to_display.first_name|length > 0 %}
+                            <h2>
+                                <strong>{{user_to_display.first_name}} {{user_to_display.last_name}} ({{user_to_display.username}})</strong>
+                            </h2>
+                        {% else %}
+                            <h2>
+                                {{user_to_display.username}}
+                            </h2>
+                        {% endif %}
+                        <p>
+                            <strong>Giới tính:</strong> <span class="tags">{{user_to_display.userprofile.gender}}</span>
+                        </p>
+                        <p>
+                            <strong>Ngày sinh:</strong> {{user_to_display.userprofile.dateOfBirth}}
+                        <figure>
+                            <img src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png" alt="" class="img-circle img-responsive">
+                            <figcaption class="ratings">
+                                <p>Ratings
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star"></span>
+                                    </a>
+                                    <a href="#">
+                                        <span class="fa fa-star-o"></span>
+                                    </a>
+                                </p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 text-center">
+                        <img class="avatar img-circle" src="{{ MEDIA_URL }}/{{user_to_display.userprofile.avatar}}" alt="User profile" />
+                    </div>
+                </div>
+                <div class="col-xs-12 divider text-center">
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <h2>
+                            <strong> {{user_to_display.userprofile.followers.all|length}} </strong>
+                            
+                        </h2>
+                        <p>
+                            <p>Followers</p>
+                        </p>
+                        {% if user.is_authenticated %}
+                            {% if user.userprofile in user_to_display.userprofile.followers.all %}
+                                
+                                <a class="btn btn-danger btn-block" href="{% url 'pet:user unfollow' user_to_display.id%}">
+                                    <span class="fa fa-plus-circle"></span> Unfollow!</a>
+                            {% else %}
+                                <a class="btn btn-success btn-block" href="{% url 'pet:user follow' user_to_display.id%}">
+                                    <span class="fa fa-plus-circle"></span> Follow!</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <h2>
+                            <strong>{{user_to_display.userprofile.follows.all|length}}</strong>
+                        </h2>
+                        <p>
+                            <p>Following</p>
+                        </p>
+                        <button class="btn btn-info btn-block">
+                            <span class="fa fa-user"></span>  View Profile </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 emphasis">
+                        <h2>
+                            <strong>{{user_to_display.userprofile.purchases.all|length}}</strong>
+                        </h2>
+                        <p>
+                            <p>Purchases</p>
+                        </p>
+                        <a class="btn btn-info btn-block" href="{% url 'pet:user purchases' user_to_display.id 'Chó' 'price'%}">
+                            <span class="fa fa-user"></span> View Purchases </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

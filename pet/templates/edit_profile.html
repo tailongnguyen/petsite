@@ -1,0 +1,80 @@
+{% extends 'base.html' %} 
+{% block title %} Edit profile {% endblock title %} {% block content %}
+<div class="page-header">
+    <h1>Edit Profile</h1>
+</div>
+<!-- <form method="POST" action="{% url 'pet:edit profile' %}" class="" > 
+{% csrf_token %} 
+{{ user_form.as_p }}
+{{ user_profile_form.as_p }}
+<button class="btn btn-success" type="submit">Save</button>
+</form> -->
+{% if messages %}
+    {% for message in messages %}
+        <p>{{message}}</p>
+    {% endfor %}
+{% endif %}
+<div class="content">
+    <form method="post" action="{% url 'pet:edit profile' %}" enctype="multipart/form-data" class="">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <p class="required">
+                <label for="id_username">Username:</label>
+                <input class="form-control" id="id_username" maxlength="30" name="username" type="text" value="{{user.username}}" placeholder="Enter username" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="firstname">First Name:</label>
+                <input class="form-control" id="firstname" maxlength="30" name="first_name" type="text" value="{{user.first_name}}" placeholder="Enter username" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="lastname">Last Name:</label>
+                <input class="form-control" id="lastname" maxlength="30" name="last_name" type="text" value="{{user.last_name}}"placeholder="Enter username" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_email">E-mail:</label>
+                <input class="form-control" id="id_email" name="email" type="email" value="{{user.email}}"placeholder="Enter email" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_gender">Gender:</label>
+                <br>
+                <input  id="id_gender" type="radio" name="gender" value="Nam" checked> Nam
+                <br>
+                <input  id="id_gender" type="radio" name="gender" value="Nữ"> Nữ
+                <br>
+            </p>
+        </div>
+        <div class="form-group">
+            <p>
+                <label for="id_date">Date of birth:</label>
+                <input class="form-control" id="id_date" name="dateOfBirth" type="date" value="{{user.userprofile.dateOfBirth|date:"Y-m-d"}}"/>
+            </p>
+        </div>
+        <div class="form-group">
+            <p>
+                <label for='id_avatar'>Image:</label>
+                <div class="row">
+                    <img class='avatar' style='float:left; margin-left:16px;' src="{{ MEDIA_URL }}/{{user.userprofile.avatar}}" alt="User profile"
+                    />
+                </div>
+                <label class="input-group-btn">
+                    <span class="btn btn-default">
+                        Browse
+                        <input type="file" id="id_avatar" style="display: none;" class="file form-control" name="avatar"/>
+                    </span>
+                </label>
+            </p>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}
+    Pets list
+{% endblock title %}
+
+{% block content %}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <div class="well">
+        <h1>It's like you're looking for some cuteness!</h1>
+    </div>
+    <div class="container content">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+        <div class="panel panel-default">
+            <ul class="list-group" id="myUL">
+                {% for pet in pet_list %}
+                    <li class="list-group-item">
+                        <h3>
+                            <div>{{ pet.petName }}</div> <span class="likes">{{pet.followers.all|length}}  Likes</span> 
+                            <span class="purchases">{{pet.pet_purchases.all|length}} Purchases</span>
+                        </h3>
+                        <a href="{% url 'pet:pet detail' pet.petCode %}" class="btn btn-info btn-sm">
+                            <i class="glyphicon glyphicon-book"></i> Detail</a>                        
+                        <a href="{% url 'pet:pet custom purchases' pet.petCode 'price' %}" class="btn btn-warning btn-sm">
+                            <i class="glyphicon glyphicon-bullhorn"></i> Purchases</a>
+
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script>
+        function myFunction() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myUL");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("h3")[0].getElementsByTagName("div")[0];
+                if (a.textContent.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+{% endblock content %}

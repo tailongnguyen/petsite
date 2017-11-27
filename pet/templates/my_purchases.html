@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}
+    Purchases
+{% endblock title %}
+
+{% block content %}
+    <div class="well">
+        <h1>You have {{ object_list|length }} purchases.</h1>
+    </div>
+    <div style="float:right;">
+        <a href="{% url 'pet:add purchase'%}" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Adding new purchase!</a>
+    </div>
+    <div class="dropdown" style="float:right">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Type
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'pet:my purchases' 'Chó' typeFilter %}">Chó</a>
+            </li>
+            <li>
+                <a href="{% url 'pet:my purchases' 'Mèo' typeFilter %}">Mèo</a>
+            </li>
+            <li>
+                <a href="{% url 'pet:my purchases' 'all' typeFilter %}">Tất cả</a>
+            </li>
+        </ul>
+    </div>  
+    <div class="dropdown" style="float:right">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Filter
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'pet:my purchases' typePet 'price' %}">Giá</a>
+            </li>
+            <li>
+                <a href="{% url 'pet:my purchases' typePet 'timeCreate' %}">Thời gian</a>
+            </li>
+            <li>
+                <a href="{% url 'pet:my purchases' typePet 'subscribers' %}">Quan tâm</a>
+            </li>
+        </ul>
+    </div>
+    {% if typeFilter == 'price' or typeFilter == 'timeCreate' %}
+        {% for p in object_list|dictsortreversed:typeFilter%}
+        <div class="media content">
+            <div class="media-left">
+                <a href="{% url 'pet:edit purchase' p.id %}">
+                    <img class="purchase_image img-circle" src="{{ MEDIA_URL }}/{{p.image}}" alt="Image" />
+                </a>
+            </div>
+            <div class="media-body media-middle">
+                <div>
+                    <p><strong>Price</strong>: {{p.price}}</p>
+                    <p><strong>Time Create</strong>: {{p.timeCreate}}</p>
+                    <p><strong>Subscribe</strong>: {{ p.subscribers.all|length }}</p>
+                    <a class="btn btn-default" href="{% url 'pet:purchase detail' p.id %}">More Details</a>
+                     {% if p.available %}
+                        <span class="active">Active</span>
+                    {% else %}
+                        <span class="inactive">Inactive</span>
+                    {%endif%}
+                </div>
+                </div>
+            </div>
+            <hr>
+        {%endfor%}
+    {% else %}
+        {% for p in object_list %}
+            <div class="media content">
+                <div class="media-left">
+                    <a href="{% url 'pet:edit purchase' p.id %}">
+                        <img class="purchase_image img-circle" src="{{ MEDIA_URL }}/{{p.image}}" alt="Image" />
+                    </a>
+                </div>
+                <div class="media-body media-middle">
+                    <div>
+                        <p><strong>Price</strong>: {{p.price}}</p>
+                        <p><strong>Time Create</strong>: {{p.timeCreate}}</p>
+                        <p><strong>Subscribe</strong>: {{ p.subscribers.all|length }}</p>
+                        <a class="btn btn-default" href="{% url 'pet:purchase detail' p.id %}">More Details</a>
+                        {% if p.available %}
+                           <span class="active">Active</span>
+                        {% else %}
+                           <span class="inactive">Inactive</span>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+            <hr>
+        {%endfor%}
+    {% endif %}
+        
+{% endblock content %}

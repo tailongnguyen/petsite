@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}
+    Community
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h1>Want to see how people are doing in pet world?</h1>
+            <p>There are {{ object_list|length }} users</p>
+        
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="well well-sm">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Filter
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{% url 'pet:top users' 'followers'  %}">Followers</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'pet:top users' 'purchases'  %}">Purchases</a>
+                    </li>
+        
+                </ul>
+            </div>
+        </div>
+        <div id="products" class="row list-group">
+            {% for user in object_list %}
+                <div class="item  col-xs-2 col-lg-2">
+                    <div class="thumbnail">
+                        <a href="{% url 'pet:user profile' user.id %}">
+                            <img class="avatar img-responsive" src="{{ MEDIA_URL }}/{{user.avatar}}" alt="User profile" />
+                        </a>
+                        <div class="caption">
+                            <h4 class="group inner list-group-item-heading" style="text-align: center;">
+                                {{ user.user.username }} </h4>
+                            <div class="row">
+                                <div class="col-xs-12 divider text-center">
+                                    <div class="col-xs-12 col-sm-6 emphasis">
+                                        <h2>
+                                            <strong> {{user.followers.all|length}} </strong>
+                                
+                                        </h2>
+                                        <p>
+                                            <p>Followers</p>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 emphasis">
+                                        <h2>
+                                            <strong> {{user.purchases.all|length}} </strong>
+                                
+                                        </h2>
+                                        <p>
+                                            <p>Purchases</p>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}

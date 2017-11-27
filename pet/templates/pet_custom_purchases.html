@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}
+    Purchases
+{% endblock title %}
+
+{% block content %}
+    <div class="well">
+            <h1>It's like you want to adopt a {{pet.petName}}!</h1>
+            <h2>There are {{object_list|length}} purchases in active!</h2>
+    </div>
+    <div style="float:right;">
+        <a href="{% url 'pet:add purchase'%}" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Adding your purchase!</a>
+    </div>
+    <div class="dropdown" style="float:right">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Filter
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{% url 'pet:pet purchases' typePet 'price' %}">Price</a>
+            </li>
+            <li>
+                <a href="{% url 'pet:pet purchases' typePet 'timeCreate' %}">Time</a>
+            </li>
+            <li>
+                <a href="{% url 'pet:pet purchases' typePet 'subscribers' %}">Subscribers</a>
+            </li>
+        </ul>
+    </div>
+    {% if typeFilter == 'price' or typeFilter == 'timeCreate' %}
+    {% for p in object_list|dictsortreversed:typeFilter%}
+    {% if p.available %}
+    <div class="media content">
+        <div class="media-left">
+            <a href="{% url 'pet:pet detail' p.pet.petCode %}">
+                <img class="purchase_image img-circle" src="{{ MEDIA_URL }}/{{p.image}}" alt="Image" />
+            </a>
+        </div>
+        <div class="media-body media-middle">
+            <div>
+                <p>
+                    <strong>Price</strong>: {{p.price}}</p>
+                    <p>
+                        <strong>Time Create</strong>: {{p.timeCreate}}</p>
+                        <p>
+                            <strong>Subscribe</strong>: {{ p.subscribers.all|length }}</p>
+                            <a class="btn btn-default" href="{% url 'pet:purchase detail' p.id %}">More Details</a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                {%endif%}
+        {%endfor%}
+        {% else %}
+        {% for p in object_list|customsort:"subscribers" %}
+        {% if p.available %}
+        <div class="media content">
+            <div class="media-left">
+                <a href="{% url 'pet:pet detail' p.pet.petCode %}">
+                    <img class="purchase_image img-circle" src="{{ MEDIA_URL }}/{{p.image}}" alt="Image" />
+                </a>
+            </div>
+            <div class="media-body">
+                <p>
+                    <strong>Price</strong>: {{p.price}}</p>
+                    <p>
+                        <strong>Time Create</strong>: {{p.timeCreate}}</p>
+                        <p>
+                            <strong>Subscribe</strong>: {{ p.subscribers.all|length }}</p>
+                            <a class="btn btn-default" href="{% url 'pet:purchase detail' p.id %}">More Details</a>
+                        </div>
+                    </div>
+                    <hr>
+                    {%endif%}
+            {%endfor%}
+            {% endif %}
+            
+{% endblock content %}

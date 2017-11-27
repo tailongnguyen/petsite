@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% block title %}
+    Purchases
+{% endblock title %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Thông tin mua bán</h1>
+        <div style="float:right">
+            {% if user.is_authenticated %} 
+            {% if user.userprofile in purchase.subscribers.all %}
+                <a class="btn btn-primary" href="{% url 'pet:purchase unfollow' purchase.id%}">Hủy theo dõi!</a>
+            {% else %}
+                <a class="btn btn-danger" href="{% url 'pet:purchase follow' purchase.id%}">Theo dõi!</a>
+            {% endif %} 
+            {% endif %}
+        </div>
+    </div>
+    <!-- <div style="float:right">
+        {% if user.is_authenticated %} 
+            {% if user.userprofile in purchase.subscribers.all %}
+                <a class="btn btn-primary" href="{% url 'pet:purchase unfollow' purchase.id%}">Hủy theo dõi!</a>
+            {% else %}
+                <a class="btn btn-danger" href="{% url 'pet:purchase follow' purchase.id%}">Theo dõi!</a>
+            {% endif %} 
+        {% endif %}
+    </div> -->
+    <!-- <div class="content">
+    <strong>Tên: </strong> <p>{{purchase.pet.petName}}</p>
+    <strong>Thời gian đăng: </strong> <p>{{purchase.timeCreate}}</p>
+    <strong>Người đăng: </strong> <p>{{purchase.owner.user.username}}</p>
+    <strong>Số điện thoại: </strong> <p>{{purchase.phone}}</p>
+    <strong>Lượng theo dõi: </strong> <p>{{ p.subscribers.all|length }}</p>
+    <strong>Mô tả: </strong> <p>{{purchase.description}}</p>
+    <strong>Giá: </strong> <p>{{purchase.price}}</p>
+    <div><strong>Ảnh: </strong></div>
+    </div> -->
+    <div class="table-responsive">
+        <table id="lblue" width="100%" height="15" class="table">
+            <tbody>
+                <tr>
+                    <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
+                        <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
+                            <tbody>
+                                <tr> 
+                                    <td id="dblue" width="8" bgcolor="#5E5E8A"></td>
+                                    <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
+                                        <strong><b>General Details</b></strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="white" width="250"> Tên: </td>
+                    <td id="white" width="75%"></strong> {{purchase.pet.petName}}</td>
+                </tr>
+                <tr>
+                    <td id="white"> Thời gian đăng::&nbsp;</td>
+                    <td id="white"></strong>{{purchase.timeCreate}} </td>
+                </tr>
+                <tr>
+                    <td id="white"> Người đăng: </td>
+                    <td id="white"></strong>{{purchase.owner.user.username}}</td>
+                </tr>
+                
+                <tr>
+                    <td id="white"> Số điện thoại: </td>
+                    <td id="white"></strong>{{purchase.phone}} </td>
+                </tr>
+                
+                <tr>
+                    <td id="white"> Lượng theo dõi:  </td>
+                    <td id="white"></strong>{{ p.subscribers.all|length }} </td>
+                        
+                </tr>
+            </tbody>
+        </table>
+        <table id="lblue2" width="100%" height="15" class="table">
+                <tbody>
+                    <tr>
+                        <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
+                            <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                    <tr> 
+                                        <td id="dblue" width="8" bgcolor="#5E5E8A"></td>
+                                        <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
+                                            <strong><b>Seller Details</b></strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="white" width="250"> Người đăng: </td>
+                        <td id="white"></strong>{{purchase.owner.user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td id="white"> Số điện thoại: </td>
+                        <td id="white"></strong>{{purchase.phone}} </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        <table id="lblue3" width="100%" height="15" class="table">
+            <tbody>
+                <tr>
+                    <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
+                        <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
+                            <tbody>
+                                <tr> 
+                                    <td id="dblue" width="8"  bgcolor="#5E5E8A">&nbsp;</td>
+                                    <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
+                                        <strong><b>Decriptions</b></strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="white" width="250"> Mô tả: </td>
+                    <td id="white" width="75%"></strong> </strong>{{purchase.description}}</td>
+                </tr>
+                <tr>
+                    <td id="white"> Giá: </td>
+                    <td id="white"></strong> {{purchase.price}} </td>
+                </tr>
+
+            </tbody>
+        </table>                
+    </div>
+    <hr>
+    <div class="container comments content">
+        <div class="row">
+            <div class="col-sm-12">
+                <span class="badge">Comments</span>
+            </div>
+            <!-- /col-sm-12 -->
+        </div>
+        <br>
+        <!-- /row -->
+        {% for cmt in purchase.comments.all %}
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="thumbnail">
+                        <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                    </div>
+                    <!-- /thumbnail -->
+                </div>
+                <!-- /col-sm-1 -->
+        
+                <div class="col-md-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{{cmt.author.username}}</strong>
+                            <span class="text-muted">commented in {{cmt.created_date}}</span>
+                        </div>
+                        <div class="panel-body">
+                            {{cmt.text}}
+                        </div>
+                        <!-- /panel-body -->
+                    </div>
+                    <!-- /panel panel-default -->
+                </div>
+                <!-- /col-sm-5 -->
+            </div>
+        {%endfor%}
+        <!-- /row -->
+        <div class="row">
+            <div class="col-sm-1">
+                <div class="thumbnail">
+                    <img class="user-photo img-responsive" src="{{ MEDIA_URL }}/{{user.userprofile.avatar}}" alt="User profile" />
+                </div>
+                <!-- /thumbnail -->
+            </div>
+            <div class="col-sm-5">
+                <div class="widget-area no-padding blank">
+                    <div class="status-upload">
+                        <form role="form" method="post" action="{% url 'pet:purchase detail' purchase.id %}">
+                             {% csrf_token %}
+                            <textarea name="text" placeholder="What do you think?" required></textarea>
+                            <button type="submit" class="btn btn-success green">
+                                <i class="fa fa-share"></i> Comment</button>
+                        </form>
+                    </div>
+                    <!-- Status Upload  -->
+                </div>
+                <!-- Widget Area -->
+            </div>
+        </div>
+    
+    </div>
+    <!-- /container -->
+
+    <!-- {% if images|length > 0 %}
+        {% if images.has_next %}        
+            <a class="infinite-more-link" href="?page={{ images.next_page_number }}">Xem thêm</a>
+        {% endif %}
+        <div class="infinite-container">
+            {% for im in images %}
+                <div class="infinite-item row">
+                    <a href="{{ MEDIA_URL }}/{{im.image}}">
+                        <img class="avatar img-thumbnail" src="{{ MEDIA_URL }}/{{im.image}}" alt="Pet images" />
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        
+        
+        <div class="loading" style="display: none;">
+            Loading...
+        </div>
+        
+        <script>
+            var infinite = new Waypoint.Infinite({
+                element: $('.infinite-container')[0],
+                onBeforePageLoad: function () {
+                    $('.loading').show();
+                },
+                onAfterPageLoad: function ($items) {
+                    $('.loading').hide();
+                }
+            });
+        </script>
+    {% else %}
+        <p>Chưa có ảnh :(</p>
+    {% endif %} -->
+
+{% endblock content %}

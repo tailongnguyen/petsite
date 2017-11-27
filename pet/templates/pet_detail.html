@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}
+    Pets
+{% endblock title %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Thông tin</h1>
+    </div>
+    <div style="float:right">
+        {% if user.is_authenticated %} {% if user.userprofile in pet.followers.all %}
+        <a class="btn btn-primary" href="{% url 'pet:pet unfollow' pet.id%}">Unlike!</a>
+        {% else %}
+        <a class="btn btn-danger" href="{% url 'pet:pet follow' pet.id%}">Like!</a>
+        {% endif %} {% endif %}
+    </div>
+
+    <div class="wrap">
+        <ul class="tabs group">
+            <li><a href="#/1" class="active">Name</a></li>
+            <li><a href="#/2">History</a></li>
+            <li><a href="#/3">Appearance</a></li>
+            <li><a href="#/4">Habit</a></li>
+            <li><a href="#/5">Lifespan</a></li>
+            <li><a href="#/6">Health Care</a></li>
+        </ul>
+        
+        <div id="content">
+            <p id="1" >{{pet.petName}} </p>
+            <p id="2" >{{pet.petHistory}}</p>
+            <p id="3">{{pet.petAppearance}}</p>
+            <p id="4">{{pet.petHabit}}</p>
+            <p id="5">Tuổi thọ của thú cưng là {{pet.lifeSpan_min}}-{{pet.lifeSpan_max}} năm. Bạn cứ yên tâm chăm sóc nhé <3 !</p>
+            <p id="6">{{pet.others}}</p>
+    </div>
+    <div class="container">
+        {% if images|length > 0 %}
+            <div class="infinite-container">
+                {% for im in images %}
+                    <div class="infinite-item col-md-4">
+                            <img class="pet_img img-thumbnail" src="{{ MEDIA_URL }}/{{im.image}}" alt="Pet images" />
+                            <div class="overlay"></div>
+                                <a class="like" target="_blank" href="{{ MEDIA_URL }}/{{im.image}}"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                                <a class="download" target="_blank" href="{{ MEDIA_URL }}/{{im.image}}"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="loading" style="display: none;">
+                <h1 style="text-align: center;">LOADING ...</h1>
+            </div>
+            {% if images.has_next %}        
+                <a class="infinite-more-link" href="?page={{ images.next_page_number }}">Xem thêm</a>
+            {% endif %}
+        {% else %}
+            <p>Chưa có ảnh :(</p>
+        {% endif %}
+    </div>
+    <script>
+        $("#content").find('p').hide();
+        $("#1").show();
+        var tabs =  $(".tabs li a");
+        tabs.click(function() {
+            var content = this.hash.replace('/','');
+            tabs.removeClass("active");
+            $(this).addClass("active");
+        $("#content").find('p').hide();
+        $(content).fadeIn(1000);
+        });
+        var infinite = new Waypoint.Infinite({
+                            element: $('.infinite-container')[0],
+                            onBeforePageLoad: function () {
+                                $('.loading').show();
+                            },
+                            onAfterPageLoad: function ($items) {
+                                $('.loading').hide();
+                            }
+                        });
+        
+    </script>
+
+{% endblock content %}

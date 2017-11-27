@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block title %} Adding purchases {% endblock title %} {% block content %}
+<div class="page-header">
+    <h1>Adding purchases</h1>
+</div>
+<!-- <form method="POST" action="{% url 'pet:add purchase' %}" enctype="multipart/form-data" class="" > 
+{% csrf_token %} 
+{{ form.as_p }} 
+<button class="btn btn-success" type="submit">Add</button>
+</form> -->
+<!-- <form method="post" action="{% url 'pet:add purchase' %}" enctype="multipart/form-data" class="">
+    {% csrf_token %} {% for field in form %}
+    <p>
+        {{ field.label_tag }}
+        <br> {{ field }} {% if field.help_text %}
+        <small style="color: grey">{{ field.help_text }}</small>
+        {% endif %} {% for error in field.errors %}
+        <p style="color: red">{{ error }}</p>
+        {% endfor %}
+    </p>
+    {% endfor %}
+    <button type="submit">Add</button>
+</form> -->
+<div class="content">
+    <form method="post" action="{% url 'pet:add purchase' %}" enctype="multipart/form-data" class="">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <p class="required">
+                <label for="id_phone">Phone:</label>
+                <input class="form-control" id="id_phone" maxlength="30" name="phone" type="text" placeholder="Enter phone number" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_price">Price:</label>
+                <input class="form-control" id="id_price" name="price" type="number" placeholder="Enter price" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_des">Description:</label>
+                <input class="form-control" id="id_des" name="description" type="text" placeholder="Enter description" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label>Pet:</label>
+                <br>
+                {{form.pet}}
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label>Image:</label>
+                {{form.image}}
+            </p>
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+</div>
+{% endblock content %}

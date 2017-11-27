@@ -1,0 +1,57 @@
+{% extends 'base.html' %} 
+{% block title %} Edit purchase {% endblock title %} 
+{% block content %}
+<div class="page-header">
+    <h1>Edit purchase</h1>
+</div>
+<div class='content'>
+    <form method="post" action="{% url 'pet:edit purchase' purchase.id %}" enctype="multipart/form-data" class="">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <p class="required">
+                <!-- {{form.available}} -->
+                <input id="available" type="radio" name="available" value='True' checked> Available
+                <input id="available" type="radio" name="available" value='False'> Closed
+                <br> 
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_phone">Phone:</label>
+                <input class="form-control" id="id_phone" maxlength="30" name="phone" type="text" value="{{purchase.phone}}" placeholder="Enter phone number" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_price">Price:</label>
+                <input class="form-control" id="id_price" name="price" type="number" value="{{purchase.price}}"placeholder="Enter price" />
+            </p>
+        </div>
+        <div class="form-group">
+            <p class="required">
+                <label for="id_des">Description:</label>
+                <input class="form-control" id="id_des" name="description" type="text" value="{{purchase.description}}"placeholder="Enter description" />
+            </p>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <label for='image'>Image:</label>
+                <div class="row">
+                    <img style='float:left; margin-left:16px;' src="{{ MEDIA_URL }}/{{purchase.image}}" alt="Purchase Image" />
+                </div>
+                <label class="input-group-btn">
+                    <span class="btn btn-default">
+                        Browser
+                        <input type="file" style="display: none;" class="file form-control" name="image">
+                    </span>
+                </label>
+            </p>
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+</div>
+{% endblock content %}
