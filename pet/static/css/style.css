@@ -870,26 +870,6 @@ border-bottom-left-radius: 8px;
   background: rgba(0, 0, 0, .3);
 }
 
-
-/* .like_icon {
-  position: absolute;
-  width: 150px;
-  left:150px;
-  top: 150px;
-  text-align: center;
-  opacity: 0;
-  transition: opacity .35s ease;
-}
-
-.like_icon a {
-  width: 150px;
-  padding: 12px 48px;
-  text-align: center;
-  color: white;
-  border: solid 2px white;
-  z-index: 1;
-} */
-
 .infinite-item a.like{
     position: absolute;
     top: 145px;
@@ -900,6 +880,23 @@ border-bottom-left-radius: 8px;
     visibility: hidden;
     opacity: 0;
     font-size: 40px;
+}
+.infinite-item a.liked{
+    position: absolute;
+    top: 145px;
+    bottom: 0;
+    left: 120px;
+    right: 0;
+    color: rgb(243, 76, 110);
+    visibility: hidden;
+    opacity: 0;
+    font-size: 40px;
+}
+small.like_count{
+    position: absolute;
+    top: 190px;
+    left: 135px;
+    color: rgb(253, 251, 251);
 }
 .infinite-item a.download{
     position: absolute;
@@ -917,6 +914,9 @@ border-bottom-left-radius: 8px;
   visibility: visible;
 }
 .infinite-item:hover a.like:hover{
+    color: rgb(243, 76, 110);
+}
+.infinite-item:hover a.liked:hover{
     color: rgb(243, 76, 110);
 }
 .infinite-item:hover a.download:hover{

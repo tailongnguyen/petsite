@@ -70,25 +70,6 @@ def edit_profile(request):
     }
     return render(request, "edit_profile.html", context)
 
-def pet_detail(request, pet_code):
-    try:
-        pet = Pet.objects.get(petCode=pet_code)
-    except Pet.DoesNotExist:
-        raise Http404("Pet does not exist")
-
-    gallery = pet.petgallery_set.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(gallery, 10)
-    
-    try:
-        images = paginator.page(page)
-    except PageNotAnInteger:
-        images = paginator.page(1)
-    except EmptyPage:
-        images = paginator.page(paginator.num_pages)
-
-    return render(request, 'pet_detail.html', {'pet': pet, 'images': images})
-
 def user_list(request, filter_type):
     user = request.user.userprofile
     object_list = UserProfile.objects.exclude(id = user.id)
@@ -118,23 +99,99 @@ def user_unfollow(request, user_id):
     return render(request, 'user_profile.html', context={'user_to_display': user_to_unfollow})
 
 
-def pet_follow(request, pet_id):
+def pet_detail(request, pet_code):
     try:
-        pet_to_follow = Pet.objects.get(pk=pet_id)
+        pet = Pet.objects.get(petCode=pet_code)
     except Pet.DoesNotExist:
         raise Http404("Pet does not exist")
-    current_user = request.user.userprofile
-    pet_to_follow.followers.add(current_user)
-    return render(request, 'pet_detail.html', context={'pet': pet_to_follow})
 
-def pet_unfollow(request, pet_id):
+    gallery = pet.petgallery_set.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(gallery, 10)
+    
     try:
-        pet_to_unfollow = Pet.objects.get(pk=pet_id)
-    except Pet.DoesNotExist:
-        raise Http404("Pet does not exist")
-    current_user = request.user.userprofile
-    pet_to_unfollow.followers.remove(current_user)
-    return render(request, 'pet_detail.html', context={'pet': pet_to_unfollow})
+        images = paginator.page(page)
+    except PageNotAnInteger:
+        images = paginator.page(1)
+    except EmptyPage:
+        images = paginator.page(paginator.num_pages)
+
+    return render(request, 'pet_detail.html', {'pet': pet, 'images': images})
+
+class Pet_follow(RedirectView):
+    pattern_name = 'pet follow'
+    def get_redirect_url(self, *args, **kwargs):
+        try:
+            pet_to_follow = Pet.objects.get(pk=self.kwargs.get('pet_id'))
+        except Pet.DoesNotExist:
+            raise Http404("Pet does not exist")
+
+        current_user = self.request.user.userprofile
+        pet_to_follow.followers.add(current_user)
+        return pet_to_follow.get_absolute_url()
+
+class Pet_unfollow(RedirectView):
+    pattern_name = 'pet unfollow'
+    def get_redirect_url(self, *args, **kwargs):
+        try:
+            pet_to_unfollow = Pet.objects.get(pk=self.kwargs.get('pet_id'))
+        except Pet.DoesNotExist:
+            raise Http404("Pet does not exist")
+
+        current_user = self.request.user.userprofile
+        pet_to_unfollow.followers.remove(current_user)
+        return pet_to_unfollow.get_absolute_url()
+
+class LikeImage(RedirectView):
+    pattern_name = 'like image'
+
+    def get_redirect_url(self, *args, **kwargs):
+        im = PetGallery.objects.get(pk=self.kwargs.get('im_id'))
+        pet_code = self.kwargs.get('pet_code')
+        pet = Pet.objects.get(petCode=pet_code)
+        user = self.request.user.userprofile
+        url_ = pet.get_absolute_url()
+        if user in im.users_like.all():
+            im.users_like.remove(user)
+        else:
+            im.users_like.add(user)
+        return url_
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from django.contrib.auth.models import User
+
+
+class LikeImageAPI(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, im_id, pet_code, format=None):
+        im = PetGallery.objects.get(pk=im_id)
+        pet = Pet.objects.get(petCode=pet_code)
+        user = self.request.user.userprofile
+        url_ = pet.get_absolute_url()
+        updated = False
+        liked = False
+        if user.user.is_authenticated():
+            if user in im.users_like.all():
+                im.users_like.remove(user)
+                liked = False
+            else:
+                im.users_like.add(user)
+                liked = True
+
+            updated = True
+
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+
+        return Response(data)
+
 
 def purchases(request, filter_type, pet_type):
     if pet_type == 'all':
@@ -279,17 +336,3 @@ def register_complete(request):
     }
     return render(request, "registration/registration_form.html", context)
 
-class LikeImage(RedirectView):
-    def get_redirect_url(self, *args, **kwargs):
-        im = PetGallery.objects.get(pk=self.kwargs.get('im_id'))
-        pet_code = self.kwargs.get('pet_code')
-        pet = Pet.objects.get(petCode = pet_code)
-        user = self.request.user.userprofile
-        print pet, im
-        url_ = pet.get_absolute_url()
-        print url_
-        if user in im.users_like.all():
-            im.users_like.remove(user)
-        else:
-            im.users_like.add(user)
-        return url_

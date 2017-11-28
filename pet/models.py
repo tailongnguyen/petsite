@@ -46,6 +46,9 @@ class PetGallery(models.Model):
     def __unicode__(self):
         return self.pet.petName
 
+    def get_api_like_url(self):
+        return reverse('pet:like image api', kwargs={"pet_code": self.pet.petCode, "im_id": self.id})
+
 class UserProfile(models.Model):
     user = AutoOneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(

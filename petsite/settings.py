@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'pet',
     'registration',
     'annoying',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
