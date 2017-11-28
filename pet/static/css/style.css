@@ -81,7 +81,7 @@ ul.nav {
     font-family: 'Freakin', serif;
 }
 .content *{
-    font-family: 'Playfair Display', serif;
+    font-family:  Arial, Helvetica, sans-serif;
 }
 .footer *{
     font-family: 'Gilda Display', serif;
@@ -152,10 +152,9 @@ figcaption.ratings a:hover
     color:#f39c12;
     text-decoration:none;
     }
-.divider 
-{
+.divider {
     border-top:1px solid rgba(0,0,0,0.1);
-    }
+}
 .emphasis 
 {
     border-top: 4px solid transparent;
@@ -167,7 +166,11 @@ figcaption.ratings a:hover
 .emphasis h2
 {
     margin-bottom:0;
-    }
+    text-align: center;
+}
+.emphasis small{
+    margin-left: -5px;
+}
 span.tags {
     background: #1abc9c;
     border-radius: 2px;
@@ -846,13 +849,13 @@ border-bottom-left-radius: 8px;
 .wrap p{
     padding: 30px 40px;
     color: black;
-    font-family: 'Playfair Display', sans-serif;
+    font-family: Arial, sans-serif;
     line-height: 26px;
     font-size: 18px;
     margin: 0;
 } 
 
-.infinite-item{
+.step-links{
     position: relative;
 }
 .overlay {
@@ -865,12 +868,12 @@ border-bottom-left-radius: 8px;
   transition: background 0.5s ease;
 }
 
-.infinite-item:hover .overlay {
+.step-links:hover .overlay {
   display: block;
   background: rgba(0, 0, 0, .3);
 }
 
-.infinite-item a.like{
+.step-links a.like{
     position: absolute;
     top: 145px;
     bottom: 0;
@@ -881,7 +884,7 @@ border-bottom-left-radius: 8px;
     opacity: 0;
     font-size: 40px;
 }
-.infinite-item a.liked{
+.step-links a.liked{
     position: absolute;
     top: 145px;
     bottom: 0;
@@ -897,8 +900,10 @@ small.like_count{
     top: 190px;
     left: 135px;
     color: rgb(253, 251, 251);
+    visibility: hidden;
+    opacity: 0;
 }
-.infinite-item a.download{
+.step-links a.download{
     position: absolute;
     top: 145px;
     bottom: 0;
@@ -909,16 +914,20 @@ small.like_count{
     opacity: 0;
     font-size: 40px;
 }
-.infinite-item:hover a {
+.step-links:hover a {
   opacity: 1;
   visibility: visible;
 }
-.infinite-item:hover a.like:hover{
+.step-links:hover small.like_count{
+    visibility: visible;
+    opacity: 1;
+}
+.step-links:hover a.like:hover{
     color: rgb(243, 76, 110);
 }
-.infinite-item:hover a.liked:hover{
+.step-links:hover a.liked:hover{
     color: rgb(243, 76, 110);
 }
-.infinite-item:hover a.download:hover{
+.step-links:hover a.download:hover{
     color: rgb(62, 123, 34);
 }

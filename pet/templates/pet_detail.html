@@ -35,9 +35,9 @@
     </div>
     <div class="container">
         {% if images|length > 0 %}
-            <div class="infinite-container">
+            <div class="pagination">
                 {% for im in images %}
-                    <div class="infinite-item col-md-4">
+                    <div class="step-links col-sm-4">
                             <img class="pet_img img-thumbnail" src="{{ MEDIA_URL }}/{{im.image}}" alt="Pet images" />
                             <div class="overlay"></div>
                                 {% if user.userprofile in im.users_like.all %}
@@ -62,7 +62,7 @@
                 <h1 style="text-align: center;">LOADING ...</h1>
             </div>
             {% if images.has_next %}        
-                <a class="infinite-more-link" href="?page={{ images.next_page_number }}">Xem thêm</a>
+                <a href="?page={{ images.next_page_number }}"><h1 style="text-align:center;">Show more</h1></a>
             {% endif %}
         {% else %}
             <p>Chưa có ảnh :(</p>
@@ -119,6 +119,7 @@
                         }
                         updateLike(count_text, newLikes)
                         document.getElementsByClassName("like_count_" + id)[0].setAttribute("data-likes", newLikes)
+                        this_.css('color', 'rgb(243, 76, 110)')
                     },
                     error: function (error) {
                         console.log(error)

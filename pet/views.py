@@ -13,6 +13,9 @@ from django.views.generic import ListView
 from django.views.generic.base import RedirectView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 import numpy as np
 from PIL import Image
 import requests
@@ -107,7 +110,7 @@ def pet_detail(request, pet_code):
 
     gallery = pet.petgallery_set.all()
     page = request.GET.get('page', 1)
-    paginator = Paginator(gallery, 10)
+    paginator = Paginator(gallery, 15)
     
     try:
         images = paginator.page(page)
@@ -157,13 +160,6 @@ class LikeImage(RedirectView):
             im.users_like.add(user)
         return url_
 
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.contrib.auth.models import User
-
-
 class LikeImageAPI(APIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
@@ -203,13 +199,12 @@ def purchases(request, filter_type, pet_type):
                   context={'typeFilter': filter_type, 'typePet': pet_type, 'object_list': object_list})
 
 def pet_custom_purchases(request, pet_code, filter_type):
-    print "haha"
     object_list = Purchase.objects.all().filter(pet__petCode=pet_code)
     try:
         pet = Pet.objects.get(petCode=pet_code)
     except Pet.DoesNotExist:
         raise Http404("Pet does not exist")
-
+    object_list = object_list.filter(available=True)
     return render(request, 'pet_custom_purchases.html', 
                   context={'typeFilter': filter_type, 'pet': pet, 'object_list': object_list})
 

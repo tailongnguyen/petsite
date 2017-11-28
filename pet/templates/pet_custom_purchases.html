@@ -31,7 +31,6 @@
     </div>
     {% if typeFilter == 'price' or typeFilter == 'timeCreate' %}
     {% for p in object_list|dictsortreversed:typeFilter%}
-    {% if p.available %}
     <div class="media content">
         <div class="media-left">
             <a href="{% url 'pet:pet detail' p.pet.petCode %}">
@@ -51,11 +50,9 @@
                     </div>
                 </div>
                 <hr>
-                {%endif%}
         {%endfor%}
         {% else %}
         {% for p in object_list|customsort:"subscribers" %}
-        {% if p.available %}
         <div class="media content">
             <div class="media-left">
                 <a href="{% url 'pet:pet detail' p.pet.petCode %}">
@@ -73,7 +70,6 @@
                         </div>
                     </div>
                     <hr>
-                    {%endif%}
             {%endfor%}
             {% endif %}
             
