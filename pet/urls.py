@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^pets/$', views.pet_list, name='pet list'),
     url(r'^pets/findpet/$',views.find_pet,name='find pet'),
     url(r'^pet/detail/(?P<pet_code>.*)/$', views.pet_detail, name='pet detail'),
+    url(r'^pet/like/(?P<pet_code>.*)/(?P<im_id>[0-9]+)/$',
+        views.RedirectView.as_view(), name='like image'),
     url(r'^pet/(?P<pet_id>[0-9]+)/followed/$', views.pet_follow, name='pet follow'),
     url(r'^pet/(?P<pet_id>[0-9]+)/unfollowed/$', views.pet_unfollow, name='pet unfollow'),
     url(r'^purchases/mypurchases/(?P<pet_type>.*)/(?P<filter_type>.*)/$',views.my_purchases, name='my purchases'),

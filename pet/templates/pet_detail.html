@@ -40,8 +40,9 @@
                     <div class="infinite-item col-md-4">
                             <img class="pet_img img-thumbnail" src="{{ MEDIA_URL }}/{{im.image}}" alt="Pet images" />
                             <div class="overlay"></div>
-                                <a class="like" target="_blank" href="{{ MEDIA_URL }}/{{im.image}}"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                                <a class="like" target="_blank" href="{% url 'pet:like image' pet.petCode im.id %}"><i class="fa fa-heart" aria-hidden="true"></i></a>
                                 <a class="download" target="_blank" href="{{ MEDIA_URL }}/{{im.image}}"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></a>
+                                <small class="like_count">{{im.users_like|length}}</small>
                     </div>
                 {% endfor %}
             </div>

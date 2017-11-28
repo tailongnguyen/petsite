@@ -16,25 +16,6 @@
             {% endif %}
         </div>
     </div>
-    <!-- <div style="float:right">
-        {% if user.is_authenticated %} 
-            {% if user.userprofile in purchase.subscribers.all %}
-                <a class="btn btn-primary" href="{% url 'pet:purchase unfollow' purchase.id%}">Hủy theo dõi!</a>
-            {% else %}
-                <a class="btn btn-danger" href="{% url 'pet:purchase follow' purchase.id%}">Theo dõi!</a>
-            {% endif %} 
-        {% endif %}
-    </div> -->
-    <!-- <div class="content">
-    <strong>Tên: </strong> <p>{{purchase.pet.petName}}</p>
-    <strong>Thời gian đăng: </strong> <p>{{purchase.timeCreate}}</p>
-    <strong>Người đăng: </strong> <p>{{purchase.owner.user.username}}</p>
-    <strong>Số điện thoại: </strong> <p>{{purchase.phone}}</p>
-    <strong>Lượng theo dõi: </strong> <p>{{ p.subscribers.all|length }}</p>
-    <strong>Mô tả: </strong> <p>{{purchase.description}}</p>
-    <strong>Giá: </strong> <p>{{purchase.price}}</p>
-    <div><strong>Ảnh: </strong></div>
-    </div> -->
     <div class="table-responsive">
         <table id="lblue" width="100%" height="15" class="table">
             <tbody>
@@ -43,7 +24,7 @@
                         <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
                             <tbody>
                                 <tr> 
-                                    <td id="dblue" width="8" bgcolor="#5E5E8A"></td>
+                                    <td id="dblue" width="0" bgcolor="#5E5E8A"></td>
                                     <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
                                         <strong><b>General Details</b></strong>
                                     </td>
@@ -53,26 +34,26 @@
                     </td>
                 </tr>
                 <tr>
-                    <td id="white" width="250"> Tên: </td>
+                    <td id="white" width="25%"> Tên</td>
                     <td id="white" width="75%"></strong> {{purchase.pet.petName}}</td>
                 </tr>
                 <tr>
-                    <td id="white"> Thời gian đăng::&nbsp;</td>
+                    <td id="white"> Thời gian đăng </td>
                     <td id="white"></strong>{{purchase.timeCreate}} </td>
                 </tr>
                 <tr>
-                    <td id="white"> Người đăng: </td>
+                    <td id="white"> Người đăng </td>
                     <td id="white"></strong>{{purchase.owner.user.username}}</td>
                 </tr>
                 
                 <tr>
-                    <td id="white"> Số điện thoại: </td>
+                    <td id="white"> Số điện thoại </td>
                     <td id="white"></strong>{{purchase.phone}} </td>
                 </tr>
                 
                 <tr>
-                    <td id="white"> Lượng theo dõi:  </td>
-                    <td id="white"></strong>{{ p.subscribers.all|length }} </td>
+                    <td id="white"> Lượng theo dõi</td>
+                    <td id="white"></strong>{{ purchase.subscribers.all|length }} </td>
                         
                 </tr>
             </tbody>
@@ -84,7 +65,7 @@
                             <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
                                 <tbody>
                                     <tr> 
-                                        <td id="dblue" width="8" bgcolor="#5E5E8A"></td>
+                                        <td id="dblue" width="0" bgcolor="#5E5E8A"></td>
                                         <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
                                             <strong><b>Seller Details</b></strong>
                                         </td>
@@ -94,11 +75,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td id="white" width="250"> Người đăng: </td>
+                        <td id="white" width="25%"> Người đăng </td>
                         <td id="white"></strong>{{purchase.owner.user.username}}</td>
                     </tr>
                     <tr>
-                        <td id="white"> Số điện thoại: </td>
+                        <td id="white"> Số điện thoại </td>
                         <td id="white"></strong>{{purchase.phone}} </td>
                     </tr>
 
@@ -111,7 +92,7 @@
                         <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
                             <tbody>
                                 <tr> 
-                                    <td id="dblue" width="8"  bgcolor="#5E5E8A">&nbsp;</td>
+                                    <td id="dblue" width="0"  bgcolor="#5E5E8A"></td>
                                     <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
                                         <strong><b>Decriptions</b></strong>
                                     </td>
@@ -121,11 +102,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td id="white" width="250"> Mô tả: </td>
+                    <td id="white" width="25%"> Mô tả </td>
                     <td id="white" width="75%"></strong> </strong>{{purchase.description}}</td>
                 </tr>
                 <tr>
-                    <td id="white"> Giá: </td>
+                    <td id="white"> Giá </td>
                     <td id="white"></strong> {{purchase.price}} </td>
                 </tr>
 

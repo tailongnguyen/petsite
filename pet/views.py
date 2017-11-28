@@ -10,6 +10,7 @@ from .models import *
 from django.db.models import Count
 from .forms import *
 from django.views.generic import ListView
+from django.views.generic.base import RedirectView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 import numpy as np
@@ -277,3 +278,18 @@ def register_complete(request):
         "form": form,
     }
     return render(request, "registration/registration_form.html", context)
+
+class LikeImage(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        im = PetGallery.objects.get(pk=self.kwargs.get('im_id'))
+        pet_code = self.kwargs.get('pet_code')
+        pet = Pet.objects.get(petCode = pet_code)
+        user = self.request.user.userprofile
+        print pet, im
+        url_ = pet.get_absolute_url()
+        print url_
+        if user in im.users_like.all():
+            im.users_like.remove(user)
+        else:
+            im.users_like.add(user)
+        return url_

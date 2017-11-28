@@ -30,3 +30,8 @@ class RegisterForm(forms.ModelForm):
         
 class SearchFrom(forms.Form):
     image = forms.ImageField()
+
+class CommentForm(forms.ModelForm):
+    class Meta(object):
+        model = Comment
+        fields = ('text',)

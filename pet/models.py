@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from annoying.fields import AutoOneToOneField
 from django.db.models import signals
+from django.urls import reverse
 import datetime
 # Create your models here.
 
@@ -34,6 +35,8 @@ class Pet(models.Model):
     def __unicode__(self):
         return self.petName
 
+    def get_absolute_url(self):
+        return reverse("pet:pet detail", kwargs={"pet_code": self.petCode})
 
 class PetGallery(models.Model):
     image = models.ImageField(upload_to='gallery/')
