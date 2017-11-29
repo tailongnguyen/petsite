@@ -36,10 +36,12 @@ def find_pet(request):
     if image_form.is_valid():
         img = Image.open(image_form.cleaned_data.get("image"))
         data = np.array(img,dtype=np.float32)
-        # url = "http://localhost:5050/classify"
-        # file = {"image" : data[:,:,:3].tobytes()}
-        # r = requests.post(url,data)
-        return HttpResponseRedirect(reverse('pet:pet detail', kwargs={'pet_code': "st"}))
+        print(data.shape)
+        url = "http://localhost:5050/classify"
+        print("post file")
+        r = requests.post(url,data=pickle.dumps(data[:,:,:3]))
+        print("get respone")
+        return HttpResponseRedirect(reverse('pet:pet detail', kwargs={'pet_code': r.content}))
     else:
         messages.error(request, "Error") 
 
@@ -348,7 +350,7 @@ def register_complete(request):
                 user.save()                                       
                 return render(request, 'registration/registration_complete.html')
             except ValidationError:
-                print password_validators_help_texts(get_default_password_validators())
+                print(password_validators_help_texts(get_default_password_validators()))
                 context['error'] = password_validators_help_texts(get_default_password_validators())
 
     return render(request, "registration/registration_form.html", context)
