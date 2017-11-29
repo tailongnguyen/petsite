@@ -1,9 +1,73 @@
 {% extends 'base.html' %}
+{% load staticfiles %} 
+{% load static %} 
+{% load notification_tags %}
 {% block title %}
     Homepage - {{ block.super }}
 {% endblock title %}
 
 {% block content %}
-    <!-- <h1>Hello!</h1>
-    <p>Welcome to pet world.</p> -->
+    <hr>
+    {% if user.notifications.active.unread.count > 0 %}
+        <div style="display: flex; align-items: center;justify-content: center" class="content row">
+            <button  class="btn btn-default mark-all-notifications" data-mark-action="read">
+                Read all
+            </button>
+        </div>
+        <div class="container content">
+            <div class="row">
+                <ul class="listrap">
+                    {% user_notifications %}
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <h1 style="text-align: center;">You have no notifications yet</h1>
+    {% endif %}
+
+    <script>
+        jQuery.fn.extend({
+                listrap: function () {
+                    var listrap = this;
+                    listrap.getSelection = function () {
+                        var selection = new Array();
+                        listrap.children("li.active").each(function (ix, el) {
+                            selection.push($(el)[0]);
+                        });
+                        return selection;
+                    }
+                    var toggle = "li .listrap-toggle ";
+                    var selectionChanged = function () {
+                        $(this).parent().parent().toggleClass("active");
+                        listrap.trigger("selection-changed", [listrap.getSelection()]);
+                        var $notification = $(this).parent().parent().find('.mark-notification');
+                        var mark_action = $notification.attr('data-mark-action');
+                        // alert(mark_action);
+                        var mark_post_data = {
+                            id: $notification.attr('data-id'),
+                            action: mark_action,
+                            csrftoken: csrftoken
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            url: markNotificationUrl,
+                            data: mark_post_data,
+                            success: function (response) {
+                                console.log(response);
+                                markSuccess(response, $notification);
+                            }
+                        });
+                    }
+                    $(listrap).find(toggle + "img").on("click", selectionChanged);
+                    $(listrap).find(toggle + "span").on("click", selectionChanged);
+                    return listrap;
+                }
+            });
+            $(document).ready(function () {
+                $(".listrap").listrap().on("selection-changed", function (event, selection) {
+                    console.log(selection);
+                });
+            });
+    </script>
 {% endblock content %}

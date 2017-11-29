@@ -6,13 +6,13 @@
 {% block content %}
     <div class="page-header">
         <h1>Thông tin</h1>
-    </div>
-    <div style="float:right">
-        {% if user.is_authenticated %} {% if user.userprofile in pet.followers.all %}
-        <a class="btn btn-primary" href="{% url 'pet:pet unfollow' pet.id%}">Unlike!</a>
-        {% else %}
-        <a class="btn btn-danger" href="{% url 'pet:pet follow' pet.id%}">Like!</a>
-        {% endif %} {% endif %}
+        <div>
+            {% if user.is_authenticated %} {% if user.userprofile in pet.followers.all %}
+            <a class="btn btn-primary" href="{% url 'pet:pet unfollow' pet.id%}">Unlike!</a>
+            {% else %}
+            <a class="btn btn-danger" href="{% url 'pet:pet follow' pet.id%}">Like!</a>
+            {% endif %} {% endif %}
+        </div>
     </div>
 
     <div class="wrap">

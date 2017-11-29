@@ -21,6 +21,7 @@ from pet import views
 
 urlpatterns = [
     url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^notifications/', include('notify.urls', 'notifications')),
     url(r'^accounts/register/complete/$', views.register_complete, name='register complete'),
     url(r'^pet/', include('pet.urls')),
     url(r'^admin/', admin.site.urls),

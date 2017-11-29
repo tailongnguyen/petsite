@@ -1,0 +1,18 @@
+<!-- this format is not compulsory, you can have HTML that suits your project -->
+<li data-nf-id="{{ notification.id }}" class="notification {{ notification.read|yesno:'read,unread' }}">
+    <div class="listrap-toggle">
+        <span></span>
+        <img class="img-circle" style="width:100%; height:100%;" src="/media/new.png" alt="New purchase"
+        />
+    </div>
+    A <a href="{{ notification.target_url }}">purchase</a> of 
+    <a href="{{ notification.actor_url }}">{{ notification.actor }} </a> {{ notification.verb }}, 
+    <span class="timesince">{{ notification.created|timesince }} ago</span>
+
+    <button class="btn-danger delete-notification" data-id="{{ notification.id }}">X</button>
+    <button data-id="{{ notification.id }}" class="btn-default mark-notification" data-mark-action="{{ notification.read|yesno:'unread,read' }}"
+        data-toggle-text="{{ notification.read|yesno:_('read,unread') }}">
+
+        {{ notification.read|yesno:'unread,read' }}
+    </button>
+</li>

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'registration',
     'annoying',
     'rest_framework',
+    'notify',
 ]
 
 MIDDLEWARE = [
@@ -91,6 +92,13 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -129,6 +137,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = "/home/tailongnguyen/petsite/media/"
 MEDIA_URL = "/media/"
+STATIC_ROOT = '/home/tailongnguyen/petsite/pet/static/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'testing@example.com'
@@ -138,3 +147,5 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 1025
 LOGIN_REDIRECT_URL = "http://localhost:8000/pet"
 REGISTRATION_OPEN = True
+
+NOTIFY_SOFT_DELETE = True

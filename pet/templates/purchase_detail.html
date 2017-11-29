@@ -4,61 +4,14 @@
 {% endblock title %}
 
 {% block content %}
+    {% if not purchase.available and purchase.owner != user.userprofile %}
+        <h1 style="text-align: center;">This purchase was closed! </h1>
+    {% else %}
     <div class="page-header">
         <h1>Thông tin mua bán</h1>
-        <div style="float:right">
-            {% if user.is_authenticated %} 
-            {% if user.userprofile in purchase.subscribers.all %}
-                <a class="btn btn-primary" href="{% url 'pet:purchase unfollow' purchase.id%}">Hủy theo dõi!</a>
-            {% else %}
-                <a class="btn btn-danger" href="{% url 'pet:purchase follow' purchase.id%}">Theo dõi!</a>
-            {% endif %} 
-            {% endif %}
-        </div>
     </div>
-    <div class="table-responsive content">
-        <table id="lblue" width="100%" height="15" class="table">
-            <tbody>
-                <tr>
-                    <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
-                        <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
-                            <tbody>
-                                <tr> 
-                                    <td id="dblue" width="0" bgcolor="#5E5E8A"></td>
-                                    <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
-                                        <strong><b>General Details</b></strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td id="white" width="25%"> Tên</td>
-                    <td id="white" width="75%"></strong> {{purchase.pet.petName}}</td>
-                </tr>
-                <tr>
-                    <td id="white"> Thời gian đăng </td>
-                    <td id="white"></strong>{{purchase.timeCreate}} </td>
-                </tr>
-                <tr>
-                    <td id="white"> Người đăng </td>
-                    <td id="white"></strong>{{purchase.owner.user.username}}</td>
-                </tr>
-                
-                <tr>
-                    <td id="white"> Số điện thoại </td>
-                    <td id="white"></strong>{{purchase.phone}} </td>
-                </tr>
-                
-                <tr>
-                    <td id="white"> Lượng theo dõi</td>
-                    <td id="white"></strong>{{ purchase.subscribers.all|length }} </td>
-                        
-                </tr>
-            </tbody>
-        </table>
-        <table id="lblue2" width="100%" height="15" class="table">
+        <div class="table-responsive content">
+            <table id="lblue" width="100%" height="15" class="table">
                 <tbody>
                     <tr>
                         <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
@@ -67,7 +20,7 @@
                                     <tr> 
                                         <td id="dblue" width="0" bgcolor="#5E5E8A"></td>
                                         <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
-                                            <strong><b>Seller Details</b></strong>
+                                            <strong><b>General Details</b></strong>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -75,105 +28,154 @@
                         </td>
                     </tr>
                     <tr>
-                        <td id="white" width="25%"> Người đăng </td>
+                        <td id="white" width="25%"> Tên</td>
+                        <td id="white" width="75%"></strong> {{purchase.pet.petName}}</td>
+                    </tr>
+                    <tr>
+                        <td id="white"> Thời gian đăng </td>
+                        <td id="white"></strong>{{purchase.timeCreate}} </td>
+                    </tr>
+                    <tr>
+                        <td id="white"> Người đăng </td>
                         <td id="white"></strong>{{purchase.owner.user.username}}</td>
                     </tr>
+                    
                     <tr>
                         <td id="white"> Số điện thoại </td>
                         <td id="white"></strong>{{purchase.phone}} </td>
                     </tr>
-
+                    
+                    <tr>
+                        <td id="white"> Lượng theo dõi</td>
+                        <td id="white"></strong>{{ purchase.subscribers.all|length }} </td>
+                            
+                    </tr>
                 </tbody>
             </table>
-        <table id="lblue3" width="100%" height="15" class="table">
-            <tbody>
-                <tr>
-                    <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
-                        <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
-                            <tbody>
-                                <tr> 
-                                    <td id="dblue" width="0"  bgcolor="#5E5E8A"></td>
-                                    <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
-                                        <strong><b>Decriptions</b></strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td id="white" width="25%"> Mô tả </td>
-                    <td id="white" width="75%"></strong> </strong>{{purchase.description}}</td>
-                </tr>
-                <tr>
-                    <td id="white"> Giá </td>
-                    <td id="white"></strong> {{purchase.price}} </td>
-                </tr>
+            <table id="lblue2" width="100%" height="15" class="table">
+                    <tbody>
+                        <tr>
+                            <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
+                                <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                        <tr> 
+                                            <td id="dblue" width="0" bgcolor="#5E5E8A"></td>
+                                            <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
+                                                <strong><b>Seller Details</b></strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="white" width="25%"> Người đăng </td>
+                            <td id="white"></strong>{{purchase.owner.user.username}}</td>
+                        </tr>
+                        <tr>
+                            <td id="white"> Số điện thoại </td>
+                            <td id="white"></strong>{{purchase.phone}} </td>
+                        </tr>
 
-            </tbody>
-        </table>                
-    </div>
-    <hr>
-    <div class="container comments content">
-        <div class="row">
-            <div class="col-sm-12">
-                <span class="badge">Comments</span>
-            </div>
-            <!-- /col-sm-12 -->
+                    </tbody>
+                </table>
+            <table id="lblue3" width="100%" height="15" class="table">
+                <tbody>
+                    <tr>
+                        <td id="lblue" colspan="2" bgcolor="#ddd" style="border-radius: 5px" >
+                            <table id="lblue" width="100%" height="15" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                    <tr> 
+                                        <td id="dblue" width="0"  bgcolor="#5E5E8A"></td>
+                                        <td id="lblue" bgcolor="#ddd" style="font-size: 20px">
+                                            <strong><b>Decriptions</b></strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="white" width="25%"> Mô tả </td>
+                        <td id="white" width="75%"></strong> </strong>{{purchase.description}}</td>
+                    </tr>
+                    <tr>
+                        <td id="white"> Giá </td>
+                        <td id="white"></strong> {{purchase.price}} </td>
+                    </tr>
+
+                </tbody>
+            </table>                
         </div>
-        <br>
-        <!-- /row -->
-        {% for cmt in purchase.comments.all %}
+        <div style="float:left">
+            {% if user.is_authenticated and user.userprofile != purchase.owner%} {% if user.userprofile in purchase.subscribers.all %}
+            <a class="btn btn-primary" href="{% url 'pet:purchase unfollow' purchase.id%}">Subscribe!</a>
+            {% else %}
+            <a class="btn btn-danger" href="{% url 'pet:purchase follow' purchase.id%}">Unsubscribe!</a>
+            {% endif %} {% endif %}
+        </div>
+        <hr>
+        <div class="container comments content">
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-sm-12">
+                    <span class="badge">Comments</span>
+                </div>
+                <!-- /col-sm-12 -->
+            </div>
+            <br>
+            <!-- /row -->
+            {% for cmt in purchase.comments.all %}
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="thumbnail">
+                            <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                        </div>
+                        <!-- /thumbnail -->
+                    </div>
+                    <!-- /col-sm-1 -->
+            
+                    <div class="col-md-5">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <strong>{{cmt.author.username}}</strong>
+                                <span class="text-muted">commented in {{cmt.created_date}}</span>
+                            </div>
+                            <div class="panel-body">
+                                {{cmt.text}}
+                            </div>
+                            <!-- /panel-body -->
+                        </div>
+                        <!-- /panel panel-default -->
+                    </div>
+                    <!-- /col-sm-5 -->
+                </div>
+            {%endfor%}
+            <!-- /row -->
+            <div class="row">
+                <div class="col-sm-1">
                     <div class="thumbnail">
-                        <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                        <img class="user-photo img-responsive" src="{{ MEDIA_URL }}/{{user.userprofile.avatar}}" alt="User profile" />
                     </div>
                     <!-- /thumbnail -->
                 </div>
-                <!-- /col-sm-1 -->
+                <div class="col-sm-5">
+                    <div class="widget-area no-padding blank">
+                        <div class="status-upload">
+                            <form role="form" method="post" action="{% url 'pet:purchase detail' purchase.id %}">
+                                {% csrf_token %}
+                                <textarea name="text" placeholder="What do you think?" required></textarea>
+                                <button type="submit" class="btn btn-success green">
+                                    <i class="fa fa-share"></i> Comment</button>
+                            </form>
+                        </div>
+                        <!-- Status Upload  -->
+                    </div>
+                    <!-- Widget Area -->
+                </div>
+            </div>
         
-                <div class="col-md-5">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <strong>{{cmt.author.username}}</strong>
-                            <span class="text-muted">commented in {{cmt.created_date}}</span>
-                        </div>
-                        <div class="panel-body">
-                            {{cmt.text}}
-                        </div>
-                        <!-- /panel-body -->
-                    </div>
-                    <!-- /panel panel-default -->
-                </div>
-                <!-- /col-sm-5 -->
-            </div>
-        {%endfor%}
-        <!-- /row -->
-        <div class="row">
-            <div class="col-sm-1">
-                <div class="thumbnail">
-                    <img class="user-photo img-responsive" src="{{ MEDIA_URL }}/{{user.userprofile.avatar}}" alt="User profile" />
-                </div>
-                <!-- /thumbnail -->
-            </div>
-            <div class="col-sm-5">
-                <div class="widget-area no-padding blank">
-                    <div class="status-upload">
-                        <form role="form" method="post" action="{% url 'pet:purchase detail' purchase.id %}">
-                             {% csrf_token %}
-                            <textarea name="text" placeholder="What do you think?" required></textarea>
-                            <button type="submit" class="btn btn-success green">
-                                <i class="fa fa-share"></i> Comment</button>
-                        </form>
-                    </div>
-                    <!-- Status Upload  -->
-                </div>
-                <!-- Widget Area -->
-            </div>
         </div>
-    
-    </div>
+    {% endif %}
     <!-- /container -->
 
     <!-- {% if images|length > 0 %}

@@ -171,6 +171,17 @@ figcaption.ratings a:hover
 .emphasis small{
     margin-left: -5px;
 }
+
+span.noti {
+    background: #f7310e;
+    border-radius: 15px;
+    color: #f5f5f5;
+    font-weight: bold;
+    padding: 2px 4px;
+    margin-bottom: 0px;
+    margin-left: -15px;
+    font-size: 10px;
+}
 span.tags {
     background: #1abc9c;
     border-radius: 2px;
@@ -820,8 +831,8 @@ ul.tabs li a:hover {
 ul.tabs li a.active {
     margin: 30px 0 0 0;
     padding: 10px 0 10px 0;
-    background: #337ab7;
-    color: white;
+    background: #b3d3ed;
+    color: rgb(27, 27, 27);
     z-index: 4;
     outline: none;
 }
@@ -930,4 +941,69 @@ small.like_count{
 }
 .step-links:hover a.download:hover{
     color: rgb(62, 123, 34);
+}
+
+/* 
+// Listrap v1.0, by Gustavo Gondim (http://github.com/ggondim)
+// Licenced under MIT License
+// For updates, improvements and issues, see https://github.com/inosoftbr/listrap
+*/
+
+.listrap {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.listrap li {
+    margin: 0;
+    padding: 10px;
+}
+
+.listrap li.active, .listrap li:hover {
+    background-color: #d9edf7;
+}
+
+.listrap strong {
+    margin-left: 10px;
+}
+
+.listrap .listrap-toggle {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+}
+
+.listrap .listrap-toggle span {
+    background-color: #4ddd71;
+    opacity: 0.8;
+    z-index: 100;
+    width: 60px;
+    height: 60px;
+    display: none;
+    position: absolute;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 60px;
+    vertical-align: middle;
+    color: #070707;
+}
+
+.listrap .listrap-toggle span:before {
+    font-family: 'Glyphicons Halflings';
+    content: "\e013";
+}
+
+.listrap li.active .listrap-toggle span {
+    display: block;
+}
+
+.listrap button{
+    float: right;
 }

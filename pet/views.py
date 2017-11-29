@@ -13,9 +13,11 @@ from django.views.generic import ListView
 from django.views.generic.base import RedirectView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.contrib.auth.password_validation import validate_password, password_validators_help_texts, get_default_password_validators, ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
+from notify.signals import notify
 import numpy as np
 from PIL import Image
 import requests
@@ -90,6 +92,10 @@ def user_follow(request, user_id):
         raise Http404("User does not exist")
     current_user = request.user.userprofile
     user_to_follow.userprofile.followers.add(current_user)
+    
+    notify.send(current_user, recipient=user_to_follow, actor=current_user, \
+    verb='followed you.', nf_type='followed_by_one_user')
+
     return render(request, 'user_profile.html', context={'user_to_display': user_to_follow})
 
 def user_unfollow(request, user_id):
@@ -254,9 +260,13 @@ def add_purchase(request):
             purchase.price = form.cleaned_data['price']
             purchase.description = form.cleaned_data['description']
             purchase.phone = form.cleaned_data['phone']
-            purchase.pet = form.cleaned_data['pet']
+            pet = form.cleaned_data['pet']
+            purchase.pet = pet
             purchase.image = form.cleaned_data['image']
             purchase.save()
+            following_users = [u.user for u in pet.followers.all()]
+            notify.send(request.user, recipient_list=following_users, actor=pet,
+                        verb='added', target = purchase, nf_type='new_purchase')
             return HttpResponseRedirect(reverse('pet:pet purchases', kwargs={'filter_type': 'price', 'pet_type':'all'}))
     context = {
         "form": form,
@@ -275,6 +285,8 @@ def purchase_detail(request, purchase_id):
             new_comment = Comment.objects.create(post = purchase, author = request.user)
             new_comment.text = comment_form.cleaned_data['text']
             new_comment.save()
+            notify.send(request.user, recipient=purchase.owner.user, actor= request.user,
+                        verb='commented on your ', target=purchase, nf_type='comment')
             return render(request, 'purchase_detail.html', {'purchase': purchase})
     
     return render(request, 'purchase_detail.html', {'purchase': purchase, 'comment_form': comment_form})
@@ -303,6 +315,9 @@ def edit_purchase(request, purchase_id):
             purchase.available = edit_form.cleaned_data['available']
             purchase.phone = edit_form.cleaned_data['phone']
             purchase.save()
+            following_users = [u.user for u in purchase.subscribers.all()]
+            notify.send(request.user, recipient_list=following_users, actor=purchase,
+                        verb='modified', nf_type='edit_purchase')
             return HttpResponseRedirect(reverse('pet:my purchases', kwargs={'filter_type': 'timeCreate', 'pet_type': 'all'}))
         else:
             messages.error(request, "Error")
@@ -315,6 +330,10 @@ def edit_purchase(request, purchase_id):
 def register_complete(request):
     form = RegisterForm(request.POST or None)
 
+    context = {
+        "form": form,
+        "error": None,
+    }
     if request.method == 'POST':
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -322,12 +341,15 @@ def register_complete(request):
             last_name = form.cleaned_data['last_name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = User.objects.create(username=username, first_name=first_name, last_name=last_name,
-                                        email=email, password=password)
-            user.save()                                       
-            return render(request, 'registration/registration_complete.html')
-    context = {
-        "form": form,
-    }
+            try:
+                validate_password(password)
+                user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
+                                            email=email, password=password)
+                user.save()                                       
+                return render(request, 'registration/registration_complete.html')
+            except ValidationError:
+                print password_validators_help_texts(get_default_password_validators())
+                context['error'] = password_validators_help_texts(get_default_password_validators())
+
     return render(request, "registration/registration_form.html", context)
 

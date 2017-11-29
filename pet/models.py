@@ -69,6 +69,9 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_absolute_url(self):
+        return reverse('pet:user profile', kwargs={'user_id': self.user.id})
+
 class Purchase(models.Model):
     available = models.BooleanField(default = True)
     timeCreate = models.DateTimeField(auto_now_add=True, blank=True)
@@ -83,6 +86,9 @@ class Purchase(models.Model):
     def __unicode__(self):
         return self.pet.petName + ": %.0f" % self.price + 'VNĐ'
 
+    def get_absolute_url(self):
+        return reverse('pet:purchase detail', kwargs={'purchase_id': self.id})
+    
     class Meta:
         ordering = ('timeCreate', 'price', 'available')
 
