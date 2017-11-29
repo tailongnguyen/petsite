@@ -267,8 +267,9 @@ def add_purchase(request):
             purchase.image = form.cleaned_data['image']
             purchase.save()
             following_users = [u.user for u in pet.followers.all()]
-            notify.send(request.user, recipient_list=following_users, actor=pet,
-                        verb='added', target = purchase, nf_type='new_purchase')
+            if len(following_users) > 0:
+                notify.send(request.user, recipient_list=following_users, actor=pet,
+                            verb='added', target = purchase, nf_type='new_purchase')
             return HttpResponseRedirect(reverse('pet:pet purchases', kwargs={'filter_type': 'price', 'pet_type':'all'}))
     context = {
         "form": form,
