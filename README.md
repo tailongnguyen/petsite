@@ -1,5 +1,6 @@
 # DeepPet
 We use image recognition and web development to assist dog and cat lovers to find/buy/sell their favorite pets.
+![alt text](https://github.com/tailongnguyen/petsite/blob/master/gallery/screenshot.png)
 
 ## Getting Started
 
