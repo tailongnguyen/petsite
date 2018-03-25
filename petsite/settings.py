@@ -84,7 +84,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'petdatabase',
-        'USER': 'firstUser',
+        'USER': 'root',
         'PASSWORD': 'Tailong123*',
     }
 }

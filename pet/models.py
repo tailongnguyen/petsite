@@ -32,7 +32,7 @@ class Pet(models.Model):
     )
     others = models.TextField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.petName
 
     def get_absolute_url(self):
@@ -43,7 +43,7 @@ class PetGallery(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     timeCreate = models.DateTimeField(auto_now_add=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.pet.petName
 
     def get_api_like_url(self):
@@ -83,7 +83,7 @@ class Purchase(models.Model):
     owner = models.ForeignKey(UserProfile, related_name = 'purchases' ,on_delete=models.CASCADE)
     subscribers = models.ManyToManyField(UserProfile, related_name = 'subscribed_purchases', blank = True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.pet.petName + ": %.0f" % self.price + 'VNĐ'
 
     def get_absolute_url(self):
@@ -94,8 +94,8 @@ class Purchase(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Purchase, related_name='comments')
-    author = models.ForeignKey(User, related_name='user_comments')
+    post = models.ForeignKey(Purchase, on_delete = models.CASCADE ,related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_comments')
     text = models.TextField(default = "")
     created_date = models.DateTimeField(default=timezone.now)
 
