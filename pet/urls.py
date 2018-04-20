@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^profile/edit/(?P<purchase_id>[0-9]+)/$',
         views.edit_purchase, name='edit purchase'),
     url(r'^profile/(?P<user_id>[0-9]+)/$', views.user_profile, name='user profile'),
-    url(r'^profile/$', TemplateView.as_view(template_name='my_profile.html'), name='current user profile'),
+    url(r'^profile/$', views.my_profile, name='current user profile'),
     url(r'^profile/edit/$', views.edit_profile, name='edit profile'),
     url(r'^profile/(?P<user_id>[0-9]+)/followed/$', views.user_follow, name='user follow'),
     url(r'^profile/(?P<user_id>[0-9]+)/unfollowed/$', views.user_unfollow, name='user unfollow'),

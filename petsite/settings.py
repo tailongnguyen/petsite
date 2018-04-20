@@ -25,7 +25,7 @@ SECRET_KEY = '_abb##34j8l2z6o(x3*gsv#%b!et%hoxz@7pn@35-#ju)+wkjm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 ACCOUNT_ACTIVATION_DAYS = 7
 
 
@@ -145,7 +145,7 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 EMAIL_PORT = 1025
-LOGIN_REDIRECT_URL = "http://localhost:8000/pet"
+LOGIN_REDIRECT_URL = "/pet"
 REGISTRATION_OPEN = True
-
+NOTIFY_UPDATE_TIME_INTERVAL = 5000
 NOTIFY_SOFT_DELETE = True

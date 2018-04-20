@@ -36,14 +36,12 @@ def find_pet(request):
     if image_form.is_valid():
         img = Image.open(image_form.cleaned_data.get("image"))
         data = np.array(img,dtype=np.float32)
-        print(data.shape)
         url = "http://localhost:5050/classify"
-        print("post file")
         r = requests.post(url,data=pickle.dumps(data[:,:,:3]))
-        print("get respone")
-        return HttpResponseRedirect(reverse('pet:pet detail', kwargs={'pet_code': r.content}))
+        return HttpResponseRedirect(reverse('pet:pet detail', kwargs={'pet_code': r.content.decode("UTF-8")}))
     else:
-        messages.error(request, "Error") 
+        return render(request, 'index.html', context = {"invalid_form": True})
+        
 
 def user_profile(request, user_id):
     try:
@@ -53,9 +51,14 @@ def user_profile(request, user_id):
     return render(request, 'user_profile.html', {'user_to_display': user_to_display})
 
 def my_profile(request):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
     return render(request, 'my_profile.html')
 
 def edit_profile(request):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+
     user = request.user
     edit_form = EditProfileForm(request.POST or None, request.FILES)
     # print edit_form
@@ -78,8 +81,12 @@ def edit_profile(request):
     return render(request, "edit_profile.html", context)
 
 def user_list(request, filter_type):
-    user = request.user.userprofile
-    object_list = UserProfile.objects.exclude(id = user.id)
+    try:
+        user = request.user.userprofile
+        object_list = UserProfile.objects.exclude(id = user.id)
+    except AttributeError:
+        object_list = UserProfile.objects.all()
+
     if filter_type == 'followers':
         object_list = sorted(object_list, key=lambda x: -len(x.followers.all()))
     elif filter_type == 'purchases':
@@ -88,6 +95,9 @@ def user_list(request, filter_type):
     return render(request, 'users.html', context={'object_list': object_list})
 
 def user_follow(request, user_id):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+
     try:
         user_to_follow = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -101,6 +111,9 @@ def user_follow(request, user_id):
     return render(request, 'user_profile.html', context={'user_to_display': user_to_follow})
 
 def user_unfollow(request, user_id):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+
     try:
         user_to_unfollow = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -217,22 +230,26 @@ def pet_custom_purchases(request, pet_code, filter_type):
                   context={'typeFilter': filter_type, 'pet': pet, 'object_list': object_list})
 
 def other_users_purchases(request, user_id, filter_type, pet_type):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+
     if pet_type == 'all':
         object_list = Purchase.objects.all()
     else:
         object_list = Purchase.objects.all().filter(pet__petType=pet_type)
-    try:
-        current_user = request.user.userprofile
-        user = User.objects.get(pk=user_id).userprofile
-    except User.DoesNotExist:
-        raise Http404("User does not exist")
+
+    current_user = request.user.userprofile
+    user = User.objects.get(pk=user_id).userprofile
 
     object_list = object_list.filter(owner=user)
+    
     return render(request, 'purchases.html', 
                   context={'typeFilter': filter_type, 'typePet': pet_type, 'object_list': object_list,\
                             'cur_user': current_user, 'user': user})
 
 def purchase_follow(request,purchase_id):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
     try:
         purchase_to_follow = Purchase.objects.get(pk=purchase_id)
     except Purchase.DoesNotExist:
@@ -243,6 +260,8 @@ def purchase_follow(request,purchase_id):
     return render(request, 'purchase_detail.html', context={'purchase': purchase_to_follow})
 
 def purchase_unfollow(request,purchase_id):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
     try:
         purchase_to_unfollow = Purchase.objects.get(pk=purchase_id)
     except Purchase.DoesNotExist:
@@ -255,6 +274,10 @@ def purchase_unfollow(request,purchase_id):
 
 def add_purchase(request):
     user = request.user
+    
+    if user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+
     form = PurchaseForm(request.POST or None, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
@@ -295,6 +318,9 @@ def purchase_detail(request, purchase_id):
     return render(request, 'purchase_detail.html', {'purchase': purchase, 'comment_form': comment_form})
 
 def my_purchases(request, filter_type, pet_type):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+
     userprofile = request.user.userprofile
 
     if pet_type == 'all':
@@ -309,6 +335,9 @@ def my_purchases(request, filter_type, pet_type):
             context={'typeFilter': filter_type, 'typePet': pet_type, 'object_list': object_list})
 
 def edit_purchase(request, purchase_id):
+    if request.user.is_anonymous:
+        return render(request, "registration/login.html", context={"anonymous": True})
+        
     purchase = Purchase.objects.get(pk=purchase_id)
     edit_form = EditPurchaseForm(request.POST or None, request.FILES)
     if request.method == 'POST':
